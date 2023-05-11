@@ -1,2 +1,2 @@
-deployment/vagrant/*.log
-deployment/vagrant/*.vagrant
+*.log
+*.vagrant
