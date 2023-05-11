@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -eu
+
+# A git hook script to check the commit message format
+# The message should optionally start with an emoji, then a type, then optionally the scope of change in parentheses,
+# then optionally an exclamation mark, then ":" and a space
+# The type can be one of the following: fix, feat, refactor, docs, test, chore
+# The exclamation mark indicates a breaking change
+# The emoji should be in the format of :name: where name is a sequence of lowercase letters and underscores
+
+# Define the regex pattern for the emoji
+emoji=":[a-z_]+:"
+
+# Define the valid types
+types="fix|feat|refactor|docs|test|chore"
+
+# Define the regex pattern for the message format
+pattern="^($emoji )?($types)(\([^\)]+\))?(!)?: [^\s].+$"
+
+# Get the commit message from the file
+message=$(cat "$1")
+
+# Check if the message matches the pattern
+if [[ $message =~ $pattern ]]; then
+    # The message is valid
+    exit 0
+else
+    # The message is invalid
+    echo "Invalid commit message format!"
+    echo "The message should optionally start with an emoji and a space, then a type,"
+    echo "then optionally the scope of change in parentheses,"
+    echo "then optionally an exclamation mark, then \":\" and a space."
+    echo "The type can be one of the following: fix, feat, refactor, docs, test, chore."
+    echo "The exclamation mark indicates a breaking change."
+    echo "The emoji should be in the format of :name: where name is a sequence of lowercase letters and underscores."
+    echo "For example: ':rocket: feat(auth): add login functionality!'"
+    exit 1
+fi
