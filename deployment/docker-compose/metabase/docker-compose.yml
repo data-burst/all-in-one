@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  metabase:
+    container_name: metabase
+    image: metabase/metabase:v0.46.6.4
+    ports:
+      - 30900:3000 
+    volumes:
+      - metabase_data:/metabase-data
+      - ./plugins/ch-1.1.7.jar:/plugins/clickhouse.jar
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:15.3-bullseye
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    expose:
+      - 5432
+
+
+volumes:
+  postgres_data:
+  metabase_data:
+
